@@ -11,6 +11,8 @@
 #define KiB 1024
 #define BUFFER_SIZE 4*KiB
 
+#include <Record.h>
+
 /*
  * Tape represents a block device slow enough to need
  * buffering as well as sorting algorithms that
@@ -25,6 +27,8 @@ class Tape {
 public:
 	Tape();
 	virtual ~Tape();
+
+	Record* getRecord();
 
 private:
 

@@ -17,16 +17,18 @@
  */
 class RecordFile {
 public:
-	RecordFile();
+	RecordFile(std::string filename);
 	virtual ~RecordFile();
 
+	/* This function writes buffer contents to file */
 	bool writeBuffer(Buffer* buffer);
+
+	/* This function writes file contents to buffer */
 	bool fillBuffer(Buffer* buffer);
 
 private:
 	std::string m_filename;
-	int m_cursor;
-	std::fstream m_file;
+	std::streampos m_cursor;
 };
 
 #endif /* RECORDFILE_H_ */

@@ -26,7 +26,7 @@ bool Buffer::getRecord(Record* recordToGet) {
 
 	/* If we haven't initialized the iterator -
 	 * initialize it with the beginning of the list */
-	if(m_iterator == m_records.end()){
+	if(m_iterator == m_records.end()){ /*TODO: fix initialization */
 		m_iterator = m_records.begin();
 	}
 

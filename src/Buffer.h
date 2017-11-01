@@ -22,7 +22,8 @@
  */
 class Buffer {
 public:
-	/* Creates an empty buffer with bufferSize */
+	/* Creates an empty buffer with bufferSize
+	 * Buffer size is the maximum number of records */
 	Buffer(int bufferSize);
 
 	/* Calls clearBuffer()! */
@@ -40,6 +41,11 @@ public:
 	 * and empties the list. Returns true when successful
 	 * false when buffer is already cleared */
 	bool clearBuffer();
+
+	/* Buffer size getter */
+	unsigned int getBufferSize() const {
+		return m_buffer_size;
+	}
 
 private:
 	std::list<Record*> m_records;
