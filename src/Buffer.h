@@ -8,6 +8,8 @@
 #ifndef BUFFER_H_
 #define BUFFER_H_
 
+#define END_OF_BUFFER -2
+
 #include <list>
 #include "Record.h"
 
@@ -31,10 +33,10 @@ public:
 
 	/* Returns true if there is a record to fetch,
 	 *  false otherwise*/
-	bool getRecord(Record* &recordToGet);
+	bool popRecord(Record* &recordToGet);
 
-	/* Get value of next record without moving iterator */
-	bool peekRecord();
+	/* Get value for sorting of next record without moving iterator */
+	double getNextRecordValue();
 
 	/* Returns true if there is space for a record
 	 * returns false otherwise */

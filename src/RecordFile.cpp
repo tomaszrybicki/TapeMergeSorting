@@ -11,6 +11,9 @@
 RecordFile::RecordFile(std::string filename)
 	: m_filename(filename)
 {
+	/* Clear file */
+	std::ofstream file(m_filename, std::ofstream::out | std::ofstream::trunc);
+	file.close();
 }
 
 RecordFile::~RecordFile() {
@@ -29,9 +32,11 @@ bool RecordFile::writeBuffer(Buffer* buffer) {
 	Record* record;
 
 	/* Write each record data to file from buffer */
-	while (buffer->getRecord(record)){
+	while (buffer->popRecord(record)){
 		file << record->getHeight();
+		file << std::endl;
 		file << record->getRadius();
+		file << std::endl;
 	}
 
 	file.close();

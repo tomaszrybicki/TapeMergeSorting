@@ -20,10 +20,12 @@ public:
 	RecordFile(std::string filename);
 	virtual ~RecordFile();
 
-	/* This function writes buffer contents to file */
+	/* This function writes buffer contents to file.
+	 * Buffer is intact */
 	bool writeBuffer(Buffer* buffer);
 
-	/* This function writes file contents to buffer */
+	/* This function writes file contents to buffer.
+	 * File still has the data */
 	bool fillBuffer(Buffer* buffer);
 
 private:

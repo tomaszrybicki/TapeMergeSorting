@@ -9,9 +9,12 @@
 #define TAPE_H_
 
 #define KiB 1024
-#define BUFFER_SIZE 4 * KiB
+#define BUFFER_SIZE 4 //* KiB
+
+#define END_OF_TAPE -1
 
 #include "Record.h"
+#include "RecordFile.h"
 #include "Buffer.h"
 
 /*
@@ -26,21 +29,25 @@
  */
 class Tape {
 public:
-	Tape();
+	Tape(std::string name);
 	virtual ~Tape();
 
-	/* Return the sorting value of next pointed record */
-	Record* getNextRecordValue();
+	/* Return the sorting value of next pointed record
+	 *  without removing it. Returns END_OF_TAPE on empty tape */
+	double getNextRecordValue();
 
-	/* Return next record and remove it from the tape*/
+	/* Return next record and remove it from the tape
+	 * returns 0 on empty tape*/
 	Record* popNextRecord();
 
 	/* Write record to tape */
-	bool writeRecord(Record* recordToWrite);
+	bool putRecord(Record* recordToWrite);
 
 private:
 	Buffer m_inputBuffer;
 	Buffer m_outputBuffer;
+	std::string m_name;
+	RecordFile m_file;
 };
 
 #endif /* TAPE_H_ */

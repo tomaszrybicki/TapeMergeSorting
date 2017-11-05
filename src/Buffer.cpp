@@ -17,7 +17,7 @@ Buffer::~Buffer() {
 	clearBuffer();
 }
 
-bool Buffer::getRecord(Record* &recordToGet) {
+bool Buffer::popRecord(Record* &recordToGet) {
 	/* Iterated entire list - return false */
 	if(m_iterator == m_records.end() || m_records.size() == 0){
 		recordToGet = 0;
@@ -48,6 +48,17 @@ bool Buffer::putRecord(Record* recordToBePut) {
 
 
 	return true;
+}
+
+double Buffer::getNextRecordValue() {
+	if(m_iterator == m_records.end() || m_records.size() == 0){
+		return END_OF_BUFFER;
+	}
+
+	Record* record = *m_iterator;
+
+	return record->getVolume();
+
 }
 
 bool Buffer::clearBuffer(){

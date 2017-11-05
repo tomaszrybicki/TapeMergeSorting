@@ -10,27 +10,40 @@
 #include "Record.h"
 #include "RecordFile.h"
 #include "Buffer.h"
+#include "Tape.h"
 
 using namespace std;
 
 int main() {
 	std::cerr << "Application started" << endl;
 
-	Buffer buffer(3);
 	RecordFile file("test");
+	Tape tape("test");
 
 	Record* a = new Record(1,1);
 	Record* b = new Record(2,1);
 	Record* c = new Record(3,1);
 	Record* d = new Record(4,1);
+	Record* e = new Record(5,1);
 
-	cout << buffer.putRecord(a) << endl;
-	cout << buffer.putRecord(b) << endl;
-	cout << buffer.putRecord(c) << endl;
-	cout << buffer.putRecord(d) << endl;
 
-	file.writeBuffer(&buffer);
+	tape.putRecord(a);
+	tape.putRecord(b);
+	tape.putRecord(c);
+	tape.putRecord(d);
+	tape.putRecord(e);
 
+	/* TODO: consider one buffer, flush? */
+
+	cerr << "Putted now poping" << std::endl;
+
+	tape.popNextRecord();
+	tape.popNextRecord();
+	tape.popNextRecord();
+	tape.popNextRecord();
+	tape.popNextRecord();
+
+	tape.popNextRecord();
 
 	cerr << "Closing application" << endl;
 	return 0;
