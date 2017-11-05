@@ -9,9 +9,10 @@
 #define TAPE_H_
 
 #define KiB 1024
-#define BUFFER_SIZE 4*KiB
+#define BUFFER_SIZE 4 * KiB
 
-#include <Record.h>
+#include "Record.h"
+#include "Buffer.h"
 
 /*
  * Tape represents a block device slow enough to need
@@ -28,10 +29,18 @@ public:
 	Tape();
 	virtual ~Tape();
 
-	Record* getRecord();
+	/* Return the sorting value of next pointed record */
+	Record* getNextRecordValue();
+
+	/* Return next record and remove it from the tape*/
+	Record* popNextRecord();
+
+	/* Write record to tape */
+	bool writeRecord(Record* recordToWrite);
 
 private:
-
+	Buffer m_inputBuffer;
+	Buffer m_outputBuffer;
 };
 
 #endif /* TAPE_H_ */

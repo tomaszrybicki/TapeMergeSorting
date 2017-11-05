@@ -20,9 +20,17 @@ public:
 	virtual ~Record();
 	double getVolume();
 
+	double getHeight() const {
+		return m_height;
+	}
+
+	double getRadius() const {
+		return m_radius;
+	}
+
 private:
-	double m_radius;
 	double m_height;
+	double m_radius;
 };
 
 #endif /* RECORD_H_ */

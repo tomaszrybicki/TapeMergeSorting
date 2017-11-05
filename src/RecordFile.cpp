@@ -18,22 +18,41 @@ RecordFile::~RecordFile() {
 }
 
 bool RecordFile::writeBuffer(Buffer* buffer) {
+	std::ofstream file(m_filename, std::ios::out|std::ios::app);
+
+	/* File cannot be opened */
+	if (!file.good()){
+		std::cerr << "File cannot be opened: " << m_filename << std::endl;
+		return false;
+	}
+
+	Record* record;
+
+	/* Write each record data to file from buffer */
+	while (buffer->getRecord(record)){
+		file << record->getHeight();
+		file << record->getRadius();
+	}
+
+	file.close();
+
+	return true;
 }
 
 bool RecordFile::fillBuffer(Buffer* buffer) {
 	double height, radius;
 	Record* newRecord;
 
-	std::ofstream file(m_filename, std::ios::out|std::ios::app);
+	std::ifstream file(m_filename, std::ios::in);
 
 	/* File cannot be opened */
 	if (!file.good()){
-		std::cout << "File cannot be opened: " << m_filename << std::endl;
+		std::cerr << "File cannot be opened: " << m_filename << std::endl;
 		return false;
 	}
 
 	/* Create and add records until buffer is full or file has ended */
-	for(int i = 0; i < buffer->getBufferSize(); i++){
+	for(unsigned int i = 0; i < buffer->getBufferSize(); i++){
 		/* TODO: set/get streampos */
 
 		/* We got the data */

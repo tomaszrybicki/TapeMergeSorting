@@ -10,7 +10,7 @@
 
 #include <string>
 #include <fstream>
-#include <Buffer.h>
+#include "Buffer.h"
 
 /*
  * This class represents a file to which records are saved.

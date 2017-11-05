@@ -7,7 +7,10 @@
 
 #include "Tape.h"
 
-Tape::Tape() {
+Tape::Tape()
+	: m_inputBuffer(BUFFER_SIZE)
+	, m_outputBuffer(BUFFER_SIZE)
+{
 	// TODO Auto-generated constructor stub
 
 }

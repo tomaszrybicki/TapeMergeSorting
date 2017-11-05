@@ -31,7 +31,10 @@ public:
 
 	/* Returns true if there is a record to fetch,
 	 *  false otherwise*/
-	bool getRecord(Record* recordToGet);
+	bool getRecord(Record* &recordToGet);
+
+	/* Get value of next record without moving iterator */
+	bool peekRecord();
 
 	/* Returns true if there is space for a record
 	 * returns false otherwise */

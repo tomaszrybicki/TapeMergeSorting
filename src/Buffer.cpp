@@ -10,24 +10,18 @@
 Buffer::Buffer(int bufferSize)
 	: m_buffer_size(bufferSize)
 {
+	m_iterator = m_records.begin();
 }
 
 Buffer::~Buffer() {
 	clearBuffer();
-	m_iterator = m_records.end();
 }
 
-bool Buffer::getRecord(Record* recordToGet) {
+bool Buffer::getRecord(Record* &recordToGet) {
 	/* Iterated entire list - return false */
-	if(m_iterator == m_records.end()){
+	if(m_iterator == m_records.end() || m_records.size() == 0){
 		recordToGet = 0;
 		return false;
-	}
-
-	/* If we haven't initialized the iterator -
-	 * initialize it with the beginning of the list */
-	if(m_iterator == m_records.end()){ /*TODO: fix initialization */
-		m_iterator = m_records.begin();
 	}
 
 	recordToGet = *m_iterator;
@@ -44,7 +38,14 @@ bool Buffer::putRecord(Record* recordToBePut) {
 		return false;
 	}
 
+
 	m_records.push_back(recordToBePut);
+
+	/* Make iterator point to first element */
+	if(m_records.size() == 1){
+		m_iterator = m_records.begin();
+	}
+
 
 	return true;
 }
@@ -65,7 +66,7 @@ bool Buffer::clearBuffer(){
 	m_records.clear();
 
 	/* Reset the iterator */
-	m_iterator = m_records.end();
+	m_iterator = m_records.begin();
 
 	return true;
 }
