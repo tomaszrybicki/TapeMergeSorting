@@ -18,7 +18,7 @@
  */
 class RecordFile {
 public:
-	RecordFile(std::string filename, unsigned char flags);
+	RecordFile(std::string filename, volatile unsigned char flags);
 	virtual ~RecordFile();
 
 	/* This function writes buffer contents to file.
@@ -28,6 +28,8 @@ public:
 	/* This function writes file contents to buffer.
 	 * File still has the data */
 	bool fillBuffer(Buffer* buffer);
+
+	void print(double* previousValue);
 
 private:
 	std::string m_filename;

@@ -37,7 +37,6 @@ double Tape::getNextRecordValue() {
 
 		/* No value after filling buffer means EOF */
 		if(value == END_OF_BUFFER){
-			std::cerr << "End of file in getNextRecordValue()" << std::endl;
 			return END_OF_TAPE;
 		}else{
 			return value;
@@ -58,7 +57,6 @@ Record* Tape::popNextRecord() {
 
 	/* Buffer is empty, filling next records from file */
 	}else{
-		std::cerr << "Filling buffer from file" << std::endl;
 		m_outputBuffer.clearBuffer();
 		m_file.fillBuffer(&m_outputBuffer);
 
@@ -67,7 +65,6 @@ Record* Tape::popNextRecord() {
 
 		/* No value after filling buffer means EOF */
 		if(result == false){
-			std::cerr << "End of file in popNextRecord()" << std::endl;
 			return 0;
 		}else{
 			return record;
@@ -84,7 +81,6 @@ bool Tape::putRecord(Record* recordToWrite) {
 	/* Buffer is full */
 	if(result == false){
 		/* Write buffer to file */
-		std::cerr << "Writing buffer to file" << std::endl;
 		m_file.writeBuffer(&m_inputBuffer);
 
 		m_inputBuffer.clearBuffer();
@@ -98,7 +94,7 @@ bool Tape::putRecord(Record* recordToWrite) {
 
 		return true;
 
-	/* Buffer in not full - writing to it */
+	/* Buffer is not full - writing to it */
 	}else{
 		return true;
 	}
@@ -107,11 +103,16 @@ bool Tape::putRecord(Record* recordToWrite) {
 void Tape::print() {
 	double lastValue = -1;
 
+	std::cout << "( " << m_name << " ):  ";
+
 	/* First print output buffer */
 	m_outputBuffer.print(&lastValue);
 
 	/* Print file */
+	m_file.print(&lastValue);
 
 	/* Print input buffer */
 	m_inputBuffer.print(&lastValue);
+
+	std::cout << std::endl << std::endl;
 }

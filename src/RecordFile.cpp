@@ -8,7 +8,7 @@
 #include "RecordFile.h"
 #include <iostream>
 
-RecordFile::RecordFile(std::string filename, unsigned char flags)
+RecordFile::RecordFile(std::string filename, volatile unsigned char flags)
 	: m_filename(filename)
 {
 	/* If new tape - clear file */
@@ -71,7 +71,6 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 		/* We got the data */
 		if(file >> height && file >> radius){
-			std::cout << "Read: "<< height<<" "<<radius<<std::endl;
 			newRecord = new Record(height, radius);
 			buffer->putRecord(newRecord);
 
@@ -89,4 +88,36 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 	return true;
 
+}
+
+void RecordFile::print(double* previousValue) {
+	Record* newRecord;
+	double height, radius, value;
+
+	std::ifstream file(m_filename, std::ios::in);
+
+	/* File cannot be opened */
+	if (!file.good()){
+		std::cerr << "File cannot be opened: " << m_filename << std::endl;
+		return;
+	}
+
+	/* Set cursor in file where we last finished*/
+	file.seekg(m_cursor);
+
+	while(file >> height && file >> radius){
+		newRecord = new Record(height, radius);
+		value = newRecord->getVolume();
+
+		/* Print series delimiter */
+		if(value < *previousValue){
+			std::cout << "|  ";
+		}
+
+		std::cout << value << "  ";
+		*previousValue = value;
+	}
+
+	/* Close file */
+	file.close();
 }

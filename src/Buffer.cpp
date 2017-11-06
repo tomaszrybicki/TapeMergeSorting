@@ -17,7 +17,7 @@ Buffer::Buffer(int bufferSize)
 Buffer::~Buffer() {
 	clearBuffer();
 }
-
+//have to remove popped element
 bool Buffer::popRecord(Record* &recordToGet) {
 	/* Iterated entire list - return false */
 	if(m_iterator == m_records.end() || m_records.size() == 0){
@@ -27,8 +27,8 @@ bool Buffer::popRecord(Record* &recordToGet) {
 
 	recordToGet = *m_iterator;
 
-	/* Advance iterator */
-	m_iterator++;
+	/* Remove element and advance iterator */
+	m_iterator = m_records.erase(m_iterator);
 
 	return true;
 }
@@ -93,10 +93,10 @@ void Buffer::print(double* previousValue) {
 
 		/* Series delimiter */
 		if(value < *previousValue){
-			std::cout << "| ";
+			std::cout << "|  ";
 		}
 
-		std::cout << value << " ";
+		std::cout << value << "  ";
 		*previousValue = value;
 	}
 }

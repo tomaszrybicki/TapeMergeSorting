@@ -20,12 +20,13 @@ Worker::~Worker() {
 void Worker::sort2plus2(std::string tapeName) {
 	/* Open original unsorted tape */
 	Tape* original = new Tape(tapeName, USE_EXISTING_FILE);
+	original->print();
 
 	/* Create 2+2 tapes */
 	Tape* tape1 = new Tape("tape1", NEW_TAPE);
 	Tape* tape2 = new Tape("tape2", NEW_TAPE);
-	Tape* tape3 = new Tape("tape3", NEW_TAPE);
-	Tape* tape4 = new Tape("tape4", NEW_TAPE);
+	//Tape* tape3 = new Tape("tape3", NEW_TAPE);
+	//Tape* tape4 = new Tape("tape4", NEW_TAPE);
 
 	Record* record;
 
@@ -44,6 +45,12 @@ void Worker::sort2plus2(std::string tapeName) {
 			currentTape->putRecord(record);
 		}
 	}
+
+	tape1->print();
+	tape2->print();
+
+	//delete tape1;
+	//delete tape2;
 
 	//REWIND TAPE
 	//DELETES!
