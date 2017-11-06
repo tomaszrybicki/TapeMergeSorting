@@ -8,11 +8,6 @@
 #ifndef TAPE_H_
 #define TAPE_H_
 
-#define KiB 1024
-#define BUFFER_SIZE 4 //* KiB
-
-#define END_OF_TAPE -1
-
 #include "Record.h"
 #include "RecordFile.h"
 #include "Buffer.h"
@@ -26,10 +21,16 @@
  * It is implemented as a regular file with
  * database records. Reads and writes are buffered
  * to maximize performance
+ *
+ * When passing USE_EXISTING_FILE as flag tape will
+ * load the contents of file with 'name'
+ * otherwise it will create empty tape
  */
+
+
 class Tape {
 public:
-	Tape(std::string name);
+	Tape(std::string name, unsigned char flags);
 	virtual ~Tape();
 
 	/* Return the sorting value of next pointed record
@@ -43,11 +44,19 @@ public:
 	/* Write record to tape */
 	bool putRecord(Record* recordToWrite);
 
+	/* Print record with series delimiting */
+	void print();
+
+	double getLastPutValue() const {
+		return m_lastPutValue;
+	}
+
 private:
 	Buffer m_inputBuffer;
 	Buffer m_outputBuffer;
 	std::string m_name;
 	RecordFile m_file;
+	double m_lastPutValue;
 };
 
 #endif /* TAPE_H_ */

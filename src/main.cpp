@@ -7,43 +7,47 @@
 //============================================================================
 
 #include <iostream>
-#include "Record.h"
 #include "RecordFile.h"
-#include "Buffer.h"
 #include "Tape.h"
+#include "Record.h"
+#include "Buffer.h"
 
 using namespace std;
 
+/* TODO:
+ * -printing
+ * -binary files
+ * -pagefile counter
+ * -generate files
+ * -byte page size
+ * -wykrwwanie konca serii i konca pliku
+ * -add clearing file
+ */
 int main() {
 	std::cerr << "Application started" << endl;
 
-	RecordFile file("test");
-	Tape tape("test");
+	Tape tape("test", NEW_TAPE);
 
-	Record* a = new Record(1,1);
-	Record* b = new Record(2,1);
-	Record* c = new Record(3,1);
-	Record* d = new Record(4,1);
-	Record* e = new Record(5,1);
+//	Record* created;
+	Record* read;
 
 
-	tape.putRecord(a);
-	tape.putRecord(b);
-	tape.putRecord(c);
-	tape.putRecord(d);
-	tape.putRecord(e);
-
-	/* TODO: consider one buffer, flush? */
+//	for(int i =1 ; i<10; i++){
+//		created = new Record(1,i);
+//		tape.putRecord(created);
+//	}
 
 	cerr << "Putted now poping" << std::endl;
 
-	tape.popNextRecord();
-	tape.popNextRecord();
-	tape.popNextRecord();
-	tape.popNextRecord();
-	tape.popNextRecord();
+	for(int i =1 ; i<10; i++){
+		read = tape.popNextRecord();
 
-	tape.popNextRecord();
+		if(read){
+			cout << read->getRadius() << endl;
+		}else{
+			cout <<"End of file";
+		}
+	}
 
 	cerr << "Closing application" << endl;
 	return 0;

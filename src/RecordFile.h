@@ -11,13 +11,14 @@
 #include <string>
 #include <fstream>
 #include "Buffer.h"
+#include "Defines.h"
 
 /*
  * This class represents a file to which records are saved.
  */
 class RecordFile {
 public:
-	RecordFile(std::string filename);
+	RecordFile(std::string filename, unsigned char flags);
 	virtual ~RecordFile();
 
 	/* This function writes buffer contents to file.

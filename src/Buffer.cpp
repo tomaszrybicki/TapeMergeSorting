@@ -7,6 +7,7 @@
 
 #include "Buffer.h"
 
+
 Buffer::Buffer(int bufferSize)
 	: m_buffer_size(bufferSize)
 {
@@ -82,3 +83,20 @@ bool Buffer::clearBuffer(){
 	return true;
 }
 
+void Buffer::print(double* previousValue) {
+	Record* record;
+	double value;
+
+	for(auto i = m_records.begin(); i != m_records.end(); ++i){
+		record = *i;
+		value = record->getVolume();
+
+		/* Series delimiter */
+		if(value < *previousValue){
+			std::cout << "| ";
+		}
+
+		std::cout << value << " ";
+		*previousValue = value;
+	}
+}

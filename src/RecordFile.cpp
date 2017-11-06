@@ -8,12 +8,18 @@
 #include "RecordFile.h"
 #include <iostream>
 
-RecordFile::RecordFile(std::string filename)
+RecordFile::RecordFile(std::string filename, unsigned char flags)
 	: m_filename(filename)
 {
-	/* Clear file */
-	std::ofstream file(m_filename, std::ofstream::out | std::ofstream::trunc);
-	file.close();
+	/* If new tape - clear file */
+	if(flags & NEW_TAPE){
+		std::ofstream fileOut(m_filename, std::ofstream::out | std::ofstream::trunc);
+		fileOut.close();
+	}
+
+	/*Set cursor to beginning of file */
+	std::ifstream fileIn(m_filename, std::ios::in);
+	m_cursor = fileIn.tellg();
 }
 
 RecordFile::~RecordFile() {
@@ -56,12 +62,16 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 		return false;
 	}
 
+	/* Set cursor in file where we last finished*/
+	file.seekg(m_cursor);
+
 	/* Create and add records until buffer is full or file has ended */
 	for(unsigned int i = 0; i < buffer->getBufferSize(); i++){
 		/* TODO: set/get streampos */
 
 		/* We got the data */
 		if(file >> height && file >> radius){
+			std::cout << "Read: "<< height<<" "<<radius<<std::endl;
 			newRecord = new Record(height, radius);
 			buffer->putRecord(newRecord);
 

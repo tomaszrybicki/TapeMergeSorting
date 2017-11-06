@@ -8,15 +8,17 @@
 #include "Tape.h"
 #include <iostream>
 
-Tape::Tape(std::string name)
+Tape::Tape(std::string name, unsigned char flags)
 	: m_inputBuffer(BUFFER_SIZE)
 	, m_outputBuffer(BUFFER_SIZE)
 	, m_name(name)
-	, m_file(m_name)
+	, m_file(m_name, flags)
+	, m_lastPutValue(-1)
 {
 }
 
 Tape::~Tape() {
+	m_file.writeBuffer(&m_inputBuffer);
 }
 
 double Tape::getNextRecordValue() {
@@ -52,7 +54,6 @@ Record* Tape::popNextRecord() {
 
 	/* Record is in buffer */
 	if(result == true){
-		m_outputBuffer.popRecord(record);
 		return record;
 
 	/* Buffer is empty, filling next records from file */
@@ -76,6 +77,7 @@ Record* Tape::popNextRecord() {
 
 bool Tape::putRecord(Record* recordToWrite) {
 	bool result;
+	m_lastPutValue = recordToWrite->getVolume();
 
 	result = m_inputBuffer.putRecord(recordToWrite);
 
@@ -100,4 +102,16 @@ bool Tape::putRecord(Record* recordToWrite) {
 	}else{
 		return true;
 	}
+}
+
+void Tape::print() {
+	double lastValue = -1;
+
+	/* First print output buffer */
+	m_outputBuffer.print(&lastValue);
+
+	/* Print file */
+
+	/* Print input buffer */
+	m_inputBuffer.print(&lastValue);
 }

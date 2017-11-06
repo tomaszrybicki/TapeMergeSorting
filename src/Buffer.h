@@ -11,6 +11,7 @@
 #define END_OF_BUFFER -2
 
 #include <list>
+#include <iostream>
 #include "Record.h"
 
 /*
@@ -20,8 +21,11 @@
  * When buffer is full it is its owner responsibility
  * to write it's contents to file and clear the buffer.
  *
+ * VALUE_TYPE is type which is used for sorting of records
+ *
  * Buffer is responsible for releasing the resources!
  */
+
 class Buffer {
 public:
 	/* Creates an empty buffer with bufferSize
@@ -51,6 +55,9 @@ public:
 	unsigned int getBufferSize() const {
 		return m_buffer_size;
 	}
+
+	/* Print buffer and return last value */
+	void print(double* previousValue);
 
 private:
 	std::list<Record*> m_records;
