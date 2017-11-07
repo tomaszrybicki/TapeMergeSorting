@@ -116,3 +116,13 @@ void Tape::print() {
 
 	std::cout << std::endl << std::endl;
 }
+
+void Tape::rewind() {
+	/* Reset buffers and state*/
+	m_outputBuffer.clearBuffer();
+	m_inputBuffer.clearBuffer();
+	m_lastPutValue = -1;
+
+	/* Truncate file */
+	m_file.clearFile();
+}

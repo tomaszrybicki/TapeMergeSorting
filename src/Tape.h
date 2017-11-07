@@ -47,6 +47,9 @@ public:
 	/* Print record with series delimiting */
 	void print();
 
+	/* Rewinds tape so that it can existing tape can be reused */
+	void rewind();
+
 	double getLastPutValue() const {
 		return m_lastPutValue;
 	}

@@ -29,6 +29,9 @@ public:
 	 * File still has the data */
 	bool fillBuffer(Buffer* buffer);
 
+	/* Truncates file */
+	void clearFile();
+
 	void print(double* previousValue);
 
 private:

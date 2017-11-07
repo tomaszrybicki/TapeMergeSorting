@@ -13,8 +13,7 @@ RecordFile::RecordFile(std::string filename, volatile unsigned char flags)
 {
 	/* If new tape - clear file */
 	if(flags & NEW_TAPE){
-		std::ofstream fileOut(m_filename, std::ofstream::out | std::ofstream::trunc);
-		fileOut.close();
+		clearFile();
 	}
 
 	/*Set cursor to beginning of file */
@@ -67,7 +66,6 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 	/* Create and add records until buffer is full or file has ended */
 	for(unsigned int i = 0; i < buffer->getBufferSize(); i++){
-		/* TODO: set/get streampos */
 
 		/* We got the data */
 		if(file >> height && file >> radius){
@@ -90,6 +88,11 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 }
 
+void RecordFile::clearFile() {
+	std::ofstream fileOut(m_filename, std::ofstream::out | std::ofstream::trunc);
+	fileOut.close();
+}
+
 void RecordFile::print(double* previousValue) {
 	Record* newRecord;
 	double height, radius, value;
@@ -101,9 +104,6 @@ void RecordFile::print(double* previousValue) {
 		std::cerr << "File cannot be opened: " << m_filename << std::endl;
 		return;
 	}
-
-	/* Set cursor in file where we last finished*/
-	file.seekg(m_cursor);
 
 	while(file >> height && file >> radius){
 		newRecord = new Record(height, radius);

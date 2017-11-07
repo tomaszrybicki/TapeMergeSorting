@@ -17,7 +17,7 @@ Buffer::Buffer(int bufferSize)
 Buffer::~Buffer() {
 	clearBuffer();
 }
-//have to remove popped element
+
 bool Buffer::popRecord(Record* &recordToGet) {
 	/* Iterated entire list - return false */
 	if(m_iterator == m_records.end() || m_records.size() == 0){

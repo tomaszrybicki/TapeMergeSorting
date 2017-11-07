@@ -21,39 +21,16 @@ using namespace std;
  * -generate files
  * -byte page size
  * -wEOF vs end of series detection?
- * -add clearing file?
  */
 
 int main() {
 	std::cerr << "Application started" << endl;
-//
-//	Tape* tape = new Tape("test", NEW_TAPE);
-////
-//	Record* created;
-//	Record* read;
-//
-//
-//	for(int i =10 ; i>0; i--){
-//		created = new Record(1,i);
-//		tape->putRecord(created);
-//	}
-//
-//	cerr << "Putted now poping" << std::endl;
-//
-//	for(int i =1 ; i<10; i++){
-//		read = tape.popNextRecord();
-//
-//		if(read){
-//			cout << read->getRadius() << endl;
-//		}else{
-//			cout <<"End of file";
-//		}
-//	}
 
 	Worker w;
-	w.sort2plus2("test");
+	w.generateRandomFile("unsorted", 10);
+	w.sort2plus2("unsorted");
 
-//delete tape;
+	//delete tape;
 	cerr << "Closing application" << endl;
 	return 0;
 }
