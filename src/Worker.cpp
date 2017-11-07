@@ -14,7 +14,6 @@ Worker::Worker() {
 }
 
 Worker::~Worker() {
-	// TODO Auto-generated destructor stub
 }
 
 void Worker::sort2plus2(std::string tapeName) {
@@ -35,7 +34,7 @@ void Worker::sort2plus2(std::string tapeName) {
 
 	/* First distribution */
 	while( (record = original->popNextRecord()) ){
-
+		std::cout<<record->getVolume()<<std::endl;
 		if(record->getVolume() >= currentTape->getLastPutValue()){
 			currentTape->putRecord(record);
 
@@ -48,6 +47,22 @@ void Worker::sort2plus2(std::string tapeName) {
 
 	tape1->print();
 	tape2->print();
+
+	tape1->rewind();
+	tape2->rewind();
+
+	double value3;
+	double value4;
+
+	/* While we have records to distribute */
+	while(tape3->getNextRecordValue() != END_OF_TAPE
+			&& tape4->getNextRecordValue() != END_OF_TAPE){
+
+		/* Distribute */
+		value1 =
+
+	}
+
 
 	delete tape1;
 	delete tape2;

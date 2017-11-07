@@ -3,7 +3,7 @@
 // Author      : Tomasz Rybicki
 // Version     : 1.0
 // Description : Entry point of the application. The application
-// 				 demonstrates 2+2 natural merging sorting of tapes
+// 				 demonstrates 2+2 natural merge sorting of tapes
 //============================================================================
 
 #include <iostream>
@@ -27,7 +27,7 @@ int main() {
 	std::cerr << "Application started" << endl;
 
 	Worker w;
-	w.generateRandomFile("unsorted", 10);
+	//w.generateRandomFile("unsorted", 10);
 	w.sort2plus2("unsorted");
 
 	//delete tape;
