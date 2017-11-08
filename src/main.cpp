@@ -18,19 +18,15 @@ using namespace std;
 /* TODO:
  * -binary files
  * -pagefile counter
- * -generate files
- * -byte page size
- * -wEOF vs end of series detection?
+ * -generate by keyboard
+ * -byte page size *
  */
 
 int main() {
-	std::cerr << "Application started" << endl;
 
 	Worker w;
-	w.generateRandomFile("unsorted", 10);
+	w.generateRandomFile("unsorted", 5);
 	w.sort2plus2("unsorted");
 
-	//delete tape;
-	cerr << "Closing application" << endl;
 	return 0;
 }

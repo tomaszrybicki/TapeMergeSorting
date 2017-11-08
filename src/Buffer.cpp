@@ -100,3 +100,7 @@ void Buffer::print(double* previousValue) {
 		*previousValue = value;
 	}
 }
+
+int Buffer::getRecordCount() {
+	return m_records.size();
+}

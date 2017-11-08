@@ -9,6 +9,7 @@
 #define SRC_WORKER_H_
 
 #include <string>
+#include "Tape.h"
 
 /* Class which offers general methods for performing sorting */
 class Worker {
@@ -24,6 +25,12 @@ public:
 
 private:
 	double random(double min, double max);
+
+	void distribute(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* currentOutTape,
+			Tape* otherOutTape, Record* recordToMove);
+
+	void printStatus(Tape* in1, Tape* in2, Tape* out1, Tape* out2);
+
 };
 
 #endif /* SRC_WORKER_H_ */

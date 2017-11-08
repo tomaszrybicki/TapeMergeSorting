@@ -59,6 +59,8 @@ public:
 	/* Print buffer and return last value */
 	void print(double* previousValue);
 
+	int getRecordCount();
+
 private:
 	std::list<Record*> m_records;
 	unsigned int m_buffer_size;

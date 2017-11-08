@@ -31,6 +31,10 @@
 class Tape {
 public:
 	Tape(std::string name, unsigned char flags);
+
+	/* Creates a tape with contents of other tape */
+	Tape(std::string name, Tape* copied);
+
 	virtual ~Tape();
 
 	/* Return the sorting value of next pointed record
@@ -50,9 +54,17 @@ public:
 	/* Rewinds tape so that it can existing tape can be reused */
 	void rewind();
 
+
 	double getLastPutValue() const {
 		return m_lastPutValue;
 	}
+
+	const std::string& getName() const {
+		return m_name;
+	}
+
+private:
+	void flushInputBuffer();
 
 private:
 	Buffer m_inputBuffer;

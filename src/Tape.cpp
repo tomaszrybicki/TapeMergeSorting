@@ -17,11 +17,28 @@ Tape::Tape(std::string name, unsigned char flags)
 {
 }
 
+
+Tape::Tape(std::string name, Tape* copied)
+: m_inputBuffer(BUFFER_SIZE)
+, m_outputBuffer(BUFFER_SIZE)
+, m_name(name)
+, m_file(m_name, NEW_TAPE)
+, m_lastPutValue(-1)
+{
+	std::ifstream  source(copied->getName(), std::ios::binary);
+	std::ofstream  dest(m_name, std::ios::binary);
+	dest << source.rdbuf();
+}
+
+
 Tape::~Tape() {
 	m_file.writeBuffer(&m_inputBuffer);
 }
 
 double Tape::getNextRecordValue() {
+	/* Flush input buffer */
+	flushInputBuffer();
+
 	double value = m_outputBuffer.getNextRecordValue();
 
 	/* Next record is in buffer */
@@ -47,6 +64,9 @@ double Tape::getNextRecordValue() {
 Record* Tape::popNextRecord() {
 	Record* record;
 	bool result;
+
+	/* Flush input buffer */
+	flushInputBuffer();
 
 	/* Check in buffer */
 	result = m_outputBuffer.popRecord(record);
@@ -105,9 +125,6 @@ void Tape::print() {
 
 	std::cout << "( " << m_name << " ):  ";
 
-	/* First print output buffer */
-	m_outputBuffer.print(&lastValue);
-
 	/* Print file */
 	m_file.print(&lastValue);
 
@@ -125,4 +142,11 @@ void Tape::rewind() {
 
 	/* Truncate file */
 	m_file.clearFile();
+}
+
+void Tape::flushInputBuffer() {
+	if(m_inputBuffer.getRecordCount()){
+		m_file.writeBuffer(&m_inputBuffer);
+		m_inputBuffer.clearBuffer();
+	}
 }

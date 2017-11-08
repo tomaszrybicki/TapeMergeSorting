@@ -55,9 +55,6 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 	std::ifstream file(m_filename, std::ios::in);
 
-	/* Fix Windows tellg() issue by disabling buffering*/
-	file.rdbuf()->pubsetbuf(nullptr, 0);
-
 	/* File cannot be opened */
 	if (!file.good()){
 		std::cerr << "File cannot be opened: " << m_filename << std::endl;
@@ -72,7 +69,6 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 		/* We got the data */
 		if(file >> height && file >> radius){
-			std::cout << height << " " << radius << std::endl;
 			newRecord = new Record(height, radius);
 			buffer->putRecord(newRecord);
 
@@ -94,6 +90,7 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 void RecordFile::clearFile() {
 	std::ofstream fileOut(m_filename, std::ofstream::out | std::ofstream::trunc);
+	m_cursor = 0;
 	fileOut.close();
 }
 
@@ -109,6 +106,7 @@ void RecordFile::print(double* previousValue) {
 		return;
 	}
 
+
 	while(file >> height && file >> radius){
 		newRecord = new Record(height, radius);
 		value = newRecord->getVolume();
@@ -120,6 +118,7 @@ void RecordFile::print(double* previousValue) {
 
 		std::cout << value << "  ";
 		*previousValue = value;
+		delete newRecord;
 	}
 
 	/* Close file */
