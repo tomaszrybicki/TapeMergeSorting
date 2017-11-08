@@ -51,15 +51,53 @@ void Worker::sort2plus2(std::string tapeName) {
 	tape1->rewind();
 	tape2->rewind();
 
-	double value3;
-	double value4;
+	double value1;
+	double value2;
+
+	Record* recordToMove;
+
+	/* We start off using tape1 and tape2 as tapes which are read */
+	Tape* inTape1 = tape1;
+	Tape* inTape2 = tape2;
+	Tape* currentOutTape = tape3;
+	Tape* otherOutTape = tape4;
+
+	Tape* tapeToWrite;
+	Tape* tapeToRead;
 
 	/* While we have records to distribute */
-	while(tape3->getNextRecordValue() != END_OF_TAPE
-			&& tape4->getNextRecordValue() != END_OF_TAPE){
+	while(inTape1->getNextRecordValue() != END_OF_TAPE
+			&& inTape2->getNextRecordValue() != END_OF_TAPE){
 
-		/* Distribute */
-		value1 =
+		/* Choose a tape to read which has smallest value */
+		value1 = inTape1->getNextRecordValue();
+		value2 = inTape2->getNextRecordValue();
+
+		if (value1 <= value2){
+			tapeToRead = inTape1;
+		}else{
+			tapeToRead = inTape2;
+		}
+
+		/* Get the record */
+		recordToMove = tapeToRead->popNextRecord();
+
+		/* Write the record to current outTape if it continues series */
+		value1 = currentOutTape->getLastPutValue();
+		value2 = otherOutTape->getLastPutValue();
+
+		/* TODO: optimize code */
+		if (recordToMove->getVolume() >= value1){
+			currentOutTape->putRecord(recordToMove);
+		}else{
+			std::swap(currentOutTape, otherOutTape);
+			currentOutTape->putRecord(recordToMove);
+		}
+
+
+
+
+
 
 	}
 
