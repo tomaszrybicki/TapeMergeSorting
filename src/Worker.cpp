@@ -34,7 +34,7 @@ void Worker::sort2plus2(std::string tapeName) {
 
 	/* First distribution */
 	while( (record = original->popNextRecord()) ){
-		std::cout<<record->getVolume()<<std::endl;
+		//std::cout<<record->getHeight() << " " << record->getRadius() << std::endl;
 		if(record->getVolume() >= currentTape->getLastPutValue()){
 			currentTape->putRecord(record);
 
@@ -45,8 +45,8 @@ void Worker::sort2plus2(std::string tapeName) {
 		}
 	}
 
-	tape1->print();
-	tape2->print();
+	//tape1->print();
+	//tape2->print();
 
 	tape1->rewind();
 	tape2->rewind();
@@ -83,6 +83,8 @@ void Worker::sort2plus2(std::string tapeName) {
 		recordToMove = tapeToRead->popNextRecord();
 
 		/* Write the record to current outTape if it continues series */
+
+		/* value1 now shows value of first element in currentOutTape*/
 		value1 = currentOutTape->getLastPutValue();
 		value2 = otherOutTape->getLastPutValue();
 
@@ -94,12 +96,17 @@ void Worker::sort2plus2(std::string tapeName) {
 			currentOutTape->putRecord(recordToMove);
 		}
 
+		/* Swap outTapes with inTapes for another phase*/
+		inTape1->rewind();
+		inTape2->rewind();
 
-
-
-
-
+		std::swap(inTape1, currentOutTape);
+		std::swap(inTape2, otherOutTape);
 	}
+
+	/* We have sorted the tape */
+	inTape1->print();
+	inTape2->print();
 
 
 	delete tape1;

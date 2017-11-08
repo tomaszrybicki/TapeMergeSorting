@@ -55,6 +55,9 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 	std::ifstream file(m_filename, std::ios::in);
 
+	/* Fix Windows tellg() issue by disabling buffering*/
+	file.rdbuf()->pubsetbuf(nullptr, 0);
+
 	/* File cannot be opened */
 	if (!file.good()){
 		std::cerr << "File cannot be opened: " << m_filename << std::endl;
@@ -69,6 +72,7 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 		/* We got the data */
 		if(file >> height && file >> radius){
+			std::cout << height << " " << radius << std::endl;
 			newRecord = new Record(height, radius);
 			buffer->putRecord(newRecord);
 

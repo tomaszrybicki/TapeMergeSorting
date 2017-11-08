@@ -27,7 +27,7 @@ int main() {
 	std::cerr << "Application started" << endl;
 
 	Worker w;
-	//w.generateRandomFile("unsorted", 10);
+	w.generateRandomFile("unsorted", 10);
 	w.sort2plus2("unsorted");
 
 	//delete tape;
