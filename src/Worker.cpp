@@ -39,11 +39,8 @@ void Worker::sort2plus2(string tapeName) {
 
 	/* We start off using tape1(original) and tape2 (empty)
 	 *  as tapes which are read */
-<<<<<<< HEAD
+
 	Record* recordToMove = NULL;
-=======
-	Record* recordToMove;
->>>>>>> 38206e77a39f12be1c8d4125a674935d36ff7148
 	Tape* inTape1 = tape1;
 	Tape* inTape2 = tape2;
 	Tape* currentOutTape = tape3;
@@ -73,8 +70,6 @@ void Worker::sort2plus2(string tapeName) {
 		inTape2->rewind();
 		swap(inTape1, currentOutTape);
 		swap(inTape2, otherOutTape);
-
-		cout << inTape1->getNextRecordValue() << " " << inTape1->getNextRecordValue() << endl;
 
 	}while(inTape1->getNextRecordValue() != END_OF_TAPE
 			&& inTape2->getNextRecordValue() != END_OF_TAPE);
