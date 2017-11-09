@@ -137,7 +137,7 @@ void Worker::distribute(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* cu
 void Worker::interface() {
 	char input = 0;
 
-	while (input != '5'){
+	while (input != '6'){
 		do
 		{
 			cin.sync();
@@ -145,7 +145,7 @@ void Worker::interface() {
 			printMenu();
 			cin >> input;
 		}
-		while( !cin.fail() && input!='1' && input!='2' && input!='3' && input!='4' && input!='5' );
+		while( !cin.fail() && input!='1' && input!='2' && input!='3' && input!='4' && input!='5' && input!='6' );
 
 		switch(input){
 		case '1':
@@ -163,10 +163,14 @@ void Worker::interface() {
 		case '4':
 			fileReads = 0;
 			fileWrites = 0;
-			sort2plus2("Unsorted.bin");
+			sort2plus2(DEFAULT_NAME);
 			break;
 
 		case '5':
+			interfaceTextFile();
+			break;
+
+		case '6':
 			return;
 
 		}
@@ -179,7 +183,8 @@ void Worker::printMenu() {
 	cout << "2) Generate file with keyboard input" << endl;
 	cout << "3) Toggle printing sorting info (currently: " << m_printInfo << ")" << endl;
 	cout << "4) Sort the file" << endl;
-	cout << "5) Exit" << endl;
+	cout << "5) Load a text test file" << endl;
+	cout << "6) Exit" << endl;
 	cout << "> ";
 }
 
@@ -196,16 +201,16 @@ void Worker::interfaceGenerateFile() {
 	}
 	while( !cin.fail() && input <= 0 );
 
-	generateRandomFile("Unsorted.bin", input);
+	generateRandomFile(DEFAULT_NAME, input);
 
-	cout << "Generated random file Unsorted.bin" << endl << endl;
+	cout << "Generated random file " << DEFAULT_NAME << endl << endl;
 }
 
 void Worker::interfaceKeyboardInput() {
 	std::string input;
 	double radius, height;
 	Record* newRecord;
-	Tape* newTape = new Tape("Unsorted.bin", NEW_TAPE);
+	Tape* newTape = new Tape(DEFAULT_NAME, NEW_TAPE);
 
 	do
 	{
@@ -238,6 +243,21 @@ void Worker::interfaceKeyboardInput() {
 	newTape->print();
 	delete newTape;
 
+}
+
+void Worker::interfaceTextFile() {
+	std::string input;
+
+	cin.sync();
+	cin.clear();
+	cout << "Enter the name of the test file" << endl;
+	cout << "> ";
+	cin >> input;
+
+
+	Tape::textToBinary(input);
+
+	cout << "Loaded test file: " << input << endl << endl;
 }
 
 void Worker::printStatus(Tape* in1, Tape* in2, Tape* out1, Tape* out2) {

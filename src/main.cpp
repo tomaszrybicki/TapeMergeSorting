@@ -15,10 +15,6 @@
 
 using namespace std;
 
-/* TODO:
- * -plik testowy
- */
-
 int fileReads = 0;
 int fileWrites = 0;
 

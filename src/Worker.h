@@ -31,6 +31,8 @@ private:
 
 	void interfaceKeyboardInput();
 
+	void interfaceTextFile();
+
 	void printMenu();
 
 	double random(double min, double max);

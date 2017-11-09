@@ -37,6 +37,8 @@ public:
 
 	virtual ~Tape();
 
+	static bool textToBinary(std::string textFile);
+
 	/* Return the sorting value of next pointed record
 	 *  without removing it. Returns END_OF_TAPE on empty tape */
 	double getNextRecordValue();

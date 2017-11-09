@@ -1,6 +1,8 @@
 #ifndef DEFINES_H_
 #define DEFINES_H_
 
+#define DEFAULT_NAME "Unsorted.bin"
+
 #define KiB 1024
 #define RECORD_SIZE 16
 #define BUFFER_SIZE  (2* RECORD_SIZE)

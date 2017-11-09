@@ -160,6 +160,32 @@ void Tape::rewind() {
 	m_file.clearFile();
 }
 
+bool Tape::textToBinary(std::string textFile) {
+	double height, radius;
+	Record* newRecord;
+	std::ifstream file(textFile, std::ios::in);
+
+	Tape* outTape = new Tape(DEFAULT_NAME, NEW_TAPE);
+
+	/* File cannot be opened */
+	if (!file.good()){
+		std::cerr << "File cannot be opened: " << textFile << std::endl;
+		return false;
+	}
+
+	/* While we still got data */
+	while(file >> height && file >> radius){
+		newRecord = new Record(height, radius);
+		outTape->putRecord(newRecord);
+	}
+
+	/* Close files */
+	file.close();
+	delete outTape;
+
+	return true;
+}
+
 void Tape::flushInputBuffer() {
 	if(m_inputBuffer.getRecordCount()){
 		m_isEmptyFile = false;
