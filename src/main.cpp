@@ -25,8 +25,8 @@ using namespace std;
 int main() {
 
 	Worker w;
-	w.generateRandomFile("unsorted", 5);
-	w.sort2plus2("unsorted");
+	w.generateRandomFile("Unsorted", 5);
+	w.sort2plus2("Unsorted");
 
 	return 0;
 }

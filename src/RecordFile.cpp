@@ -17,7 +17,7 @@ RecordFile::RecordFile(std::string filename, volatile unsigned char flags)
 	}
 
 	/*Set cursor to beginning of file */
-	std::ifstream fileIn(m_filename, std::ios::in);
+	std::ifstream fileIn(m_filename, std::ios::in|std::ios::binary);
 	m_cursor = fileIn.tellg();
 }
 
@@ -26,7 +26,7 @@ RecordFile::~RecordFile() {
 }
 
 bool RecordFile::writeBuffer(Buffer* buffer) {
-	std::ofstream file(m_filename, std::ios::out|std::ios::app);
+	std::ofstream file(m_filename, std::ios::out|std::ios::app|std::ios::binary);
 
 	/* File cannot be opened */
 	if (!file.good()){
@@ -35,13 +35,14 @@ bool RecordFile::writeBuffer(Buffer* buffer) {
 	}
 
 	Record* record;
+	double h,r;
 
-	/* Write each record data to file from buffer */
+	/* Write each record data to file from buffer in binary format*/
 	while (buffer->popRecord(record)){
-		file << record->getHeight();
-		file << std::endl;
-		file << record->getRadius();
-		file << std::endl;
+		h = record->getHeight();
+		r = record->getRadius();
+		file.write(reinterpret_cast<char*>(&h),sizeof(double));
+		file.write(reinterpret_cast<char*>(&r),sizeof(double));
 	}
 
 	file.close();
@@ -52,8 +53,10 @@ bool RecordFile::writeBuffer(Buffer* buffer) {
 bool RecordFile::fillBuffer(Buffer* buffer) {
 	double height, radius;
 	Record* newRecord;
+	/* Memory for reading a double */
+	char* bytes = new char[2 * sizeof(double)];
 
-	std::ifstream file(m_filename, std::ios::in);
+	std::ifstream file(m_filename, std::ios::in|std::ios::binary);
 
 	/* File cannot be opened */
 	if (!file.good()){
@@ -65,17 +68,25 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 	file.seekg(m_cursor);
 
 	/* Create and add records until buffer is full or file has ended */
-	for(unsigned int i = 0; i < buffer->getBufferSize(); i++){
-
-		/* We got the data */
-		if(file >> height && file >> radius){
-			newRecord = new Record(height, radius);
-			buffer->putRecord(newRecord);
-
-		/* EOF */
-		}else{
+	for(unsigned int i = 0; i < buffer->getBufferSize(); i+= 2*sizeof(double)){
+		if(file.peek() == std::ifstream::traits_type::eof()){
 			break;
 		}
+		/* Read 2 doubles from file */
+		file.read(reinterpret_cast<char*>(bytes), 2 * sizeof(double));
+
+		if(file.eof()){
+			break;
+		}
+
+		/* Reinterpret bytes as doubles */
+		double* values = (double*)bytes;
+
+		height = values[0];
+		radius = values[1];
+
+		newRecord = new Record(height, radius);
+		buffer->putRecord(newRecord);
 	}
 
 	/* Save file read position */
@@ -89,7 +100,7 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 }
 
 void RecordFile::clearFile() {
-	std::ofstream fileOut(m_filename, std::ofstream::out | std::ofstream::trunc);
+	std::ofstream fileOut(m_filename, std::ofstream::out | std::ofstream::trunc|std::ios::binary);
 	m_cursor = 0;
 	fileOut.close();
 }
@@ -97,8 +108,9 @@ void RecordFile::clearFile() {
 void RecordFile::print(double* previousValue) {
 	Record* newRecord;
 	double height, radius, value;
+	char* bytes = new char[2 * sizeof(double)];
 
-	std::ifstream file(m_filename, std::ios::in);
+	std::ifstream file(m_filename, std::ios::in|std::ios::binary);
 
 	/* File cannot be opened */
 	if (!file.good()){
@@ -107,7 +119,25 @@ void RecordFile::print(double* previousValue) {
 	}
 
 
-	while(file >> height && file >> radius){
+
+	while(true){
+
+		if(file.peek() == std::ifstream::traits_type::eof()){
+			break;
+		}
+		/* Read 2 doubles from file */
+		file.read(reinterpret_cast<char*>(bytes), 2 * sizeof(double));
+
+		if(file.eof()){
+			break;
+		}
+
+		/* Reinterpret bytes as doubles */
+		double* values = (double*)bytes;
+
+		height = values[0];
+		radius = values[1];
+
 		newRecord = new Record(height, radius);
 		value = newRecord->getVolume();
 

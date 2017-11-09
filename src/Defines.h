@@ -1,6 +1,9 @@
+#ifndef DEFINES_H_
+#define DEFINES_H_
 
 #define KiB 1024
-#define BUFFER_SIZE 3 //* KiB
+/* In bytes */
+#define BUFFER_SIZE 24
 
 #define END_OF_TAPE -1
 #define NEW_TAPE 1
@@ -10,3 +13,5 @@
 #define MAX_HEIGHT 10
 #define MIN_RADIUS 1
 #define MIN_HEIGHT 1
+
+#endif
