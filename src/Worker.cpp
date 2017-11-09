@@ -23,7 +23,7 @@ void Worker::sort2plus2(string tapeName) {
 	/* Open original unsorted tape */
 	Tape* original = new Tape(tapeName, USE_EXISTING_FILE);
 
-	cout << "Before sorting" << endl;
+	cout << "Before sorting:" << endl;
 	original->print();
 
 	/* Create 2+2 tapes */
