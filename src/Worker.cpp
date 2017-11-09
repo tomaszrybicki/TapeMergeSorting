@@ -32,12 +32,18 @@ void Worker::sort2plus2(string tapeName) {
 	Tape* tape3 = new Tape("File3.bin", NEW_TAPE);
 	Tape* tape4 = new Tape("File4.bin", NEW_TAPE);
 
+	tape1->print();
+
 	/* Original was copied to tape1 and can be released */
 	delete original;
 
 	/* We start off using tape1(original) and tape2 (empty)
 	 *  as tapes which are read */
+<<<<<<< HEAD
 	Record* recordToMove = NULL;
+=======
+	Record* recordToMove;
+>>>>>>> 38206e77a39f12be1c8d4125a674935d36ff7148
 	Tape* inTape1 = tape1;
 	Tape* inTape2 = tape2;
 	Tape* currentOutTape = tape3;
@@ -53,7 +59,6 @@ void Worker::sort2plus2(string tapeName) {
 		/* While there is at least one record in any of input tapes */
 		while(inTape1->getNextRecordValue() != END_OF_TAPE
 				|| inTape2->getNextRecordValue() != END_OF_TAPE){
-
 			distribute(inTape1, inTape2, tapeToRead, currentOutTape, otherOutTape, recordToMove);
 
 		}

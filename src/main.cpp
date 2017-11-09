@@ -25,7 +25,12 @@ int fileWrites = 0;
 int main() {
 
 	Worker w;
+<<<<<<< HEAD
 	w.interface();
+=======
+	w.generateRandomFile("Unsorted", 5);
+	w.sort2plus2("Unsorted");
+>>>>>>> 38206e77a39f12be1c8d4125a674935d36ff7148
 
 	return 0;
 }
