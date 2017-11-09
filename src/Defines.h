@@ -4,8 +4,8 @@
 #define DEFAULT_NAME "Unsorted.bin"
 
 #define KiB 1024
-#define RECORD_SIZE 16
-#define BUFFER_SIZE  (2* RECORD_SIZE)
+#define RECORD_SIZE (16)
+#define BUFFER_SIZE  (100 * RECORD_SIZE)
 
 #define END_OF_TAPE -1
 #define NEW_TAPE 1

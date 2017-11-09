@@ -72,7 +72,7 @@ bool RecordFile::fillBuffer(Buffer* buffer, bool &wasEof) {
 	file.seekg(m_cursor);
 
 	/* Create and add records until buffer is full or file has ended */
-	for(unsigned int i = 0; i < buffer->getBufferSize(); i+= 2*sizeof(double)){
+	for(unsigned int i = 0; i < buffer->getBufferSize()/RECORD_SIZE; i++){
 		if(file.peek() == std::ifstream::traits_type::eof()){
 			wasEof = true;
 			break;
@@ -92,7 +92,10 @@ bool RecordFile::fillBuffer(Buffer* buffer, bool &wasEof) {
 		radius = values[1];
 
 		newRecord = new Record(height, radius);
-		buffer->putRecord(newRecord);
+		if(!buffer->putRecord(newRecord)){
+			delete newRecord;
+			break;
+		}
 	}
 
 	/* Save file read position */
@@ -100,6 +103,7 @@ bool RecordFile::fillBuffer(Buffer* buffer, bool &wasEof) {
 
 	/* Close file */
 	file.close();
+	delete[] bytes;
 
 	return true;
 
@@ -159,4 +163,5 @@ void RecordFile::print(double* previousValue) {
 
 	/* Close file */
 	file.close();
+	delete[] bytes;
 }

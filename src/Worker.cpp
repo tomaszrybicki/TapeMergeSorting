@@ -13,7 +13,7 @@ using namespace std;
 
 Worker::Worker() {
 	srand(time(NULL));
-	m_printInfo = true;
+	m_printInfo = false;
 }
 
 Worker::~Worker() {
@@ -79,7 +79,7 @@ void Worker::sort2plus2(string tapeName) {
 	}else{
 		inTape2->print();
 	}
-	cout << "File reads: " << fileReads << " file writes: " << fileWrites << endl;
+	cout << "File reads: " << fileReads << " file writes: " << fileWrites << " phases: " << phase << endl;
 
 
 
