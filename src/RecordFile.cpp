@@ -45,6 +45,7 @@ bool RecordFile::writeBuffer(Buffer* buffer) {
 		r = record->getRadius();
 		file.write(reinterpret_cast<char*>(&h),sizeof(double));
 		file.write(reinterpret_cast<char*>(&r),sizeof(double));
+		delete record;
 	}
 
 	file.close();
@@ -92,6 +93,7 @@ bool RecordFile::fillBuffer(Buffer* buffer, bool &wasEof) {
 		radius = values[1];
 
 		newRecord = new Record(height, radius);
+
 		if(!buffer->putRecord(newRecord)){
 			delete newRecord;
 			break;

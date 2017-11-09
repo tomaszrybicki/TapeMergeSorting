@@ -13,7 +13,6 @@
 #include <list>
 #include <iostream>
 #include "Record.h"
-
 /*
  * Buffer is a wrapper class for a list which serves as
  * buffer in memory.

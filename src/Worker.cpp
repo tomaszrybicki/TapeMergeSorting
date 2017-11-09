@@ -100,7 +100,10 @@ void Worker::generateRandomFile(string name, unsigned int recordCount) {
 		radius = Worker::random(MIN_RADIUS, MAX_RADIUS);
 
 		record = new Record(height, radius);
-		tape->putRecord(record);
+		if(!tape->putRecord(record)){
+			delete record;
+			break;
+		}
 	}
 
 	delete tape;

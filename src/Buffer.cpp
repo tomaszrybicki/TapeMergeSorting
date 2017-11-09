@@ -6,7 +6,7 @@
  */
 
 #include "Buffer.h"
-
+#include "Defines.h"
 
 Buffer::Buffer(int bufferSize)
 	: m_buffer_size(bufferSize)
@@ -35,10 +35,9 @@ bool Buffer::popRecord(Record* &recordToGet) {
 
 bool Buffer::putRecord(Record* recordToBePut) {
 	/* Buffer is full - return false */
-	if(m_records.size() == m_buffer_size / (2 * sizeof(double))){
+	if(m_records.size() == (m_buffer_size / RECORD_SIZE)){
 		return false;
 	}
-
 
 	m_records.push_back(recordToBePut);
 
