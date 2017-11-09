@@ -16,7 +16,6 @@
 using namespace std;
 
 /* TODO:
- * - Fix large files
  * -plik testowy
  */
 

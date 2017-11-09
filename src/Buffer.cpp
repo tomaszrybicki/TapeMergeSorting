@@ -10,7 +10,6 @@
 
 Buffer::Buffer(int bufferSize)
 	: m_buffer_size(bufferSize)
-	, listSize(0)
 {
 	m_iterator = m_records.begin();
 }
@@ -31,14 +30,12 @@ bool Buffer::popRecord(Record* &recordToGet) {
 	/* Remove element and advance iterator */
 	m_iterator = m_records.erase(m_iterator);
 
-	listSize = m_records.size();
-
 	return true;
 }
 
 bool Buffer::putRecord(Record* recordToBePut) {
 	/* Buffer is full - return false */
-	if(m_records.size() == m_buffer_size){
+	if(m_records.size() == m_buffer_size / (2 * sizeof(double))){
 		return false;
 	}
 
@@ -49,8 +46,6 @@ bool Buffer::putRecord(Record* recordToBePut) {
 	if(m_records.size() == 1){
 		m_iterator = m_records.begin();
 	}
-
-	listSize = m_records.size();
 
 	return true;
 }
@@ -83,8 +78,6 @@ bool Buffer::clearBuffer(){
 
 	/* Reset the iterator */
 	m_iterator = m_records.begin();
-
-	listSize = m_records.size();
 
 	return true;
 }

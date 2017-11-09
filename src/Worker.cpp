@@ -174,7 +174,7 @@ void Worker::interface() {
 }
 
 void Worker::printMenu() {
-	cout << "Press the key with chosen option: " << endl;
+	cout << endl << "Press the key with chosen option: " << endl;
 	cout << "1) Generate file with random records" << endl;
 	cout << "2) Generate file with keyboard input" << endl;
 	cout << "3) Toggle printing sorting info (currently: " << m_printInfo << ")" << endl;
