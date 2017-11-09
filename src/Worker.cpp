@@ -54,6 +54,7 @@ void Worker::sort2plus2(string tapeName) {
 		/* While there is at least one record in any of input tapes */
 		while(inTape1->getNextRecordValue() != END_OF_TAPE
 				|| inTape2->getNextRecordValue() != END_OF_TAPE){
+
 			distribute(inTape1, inTape2, tapeToRead, currentOutTape, otherOutTape, recordToMove);
 
 		}
@@ -78,6 +79,9 @@ void Worker::sort2plus2(string tapeName) {
 	}else{
 		inTape2->print();
 	}
+	cout << "File reads: " << fileReads << " file writes: " << fileWrites << endl;
+
+
 
 	/* We have sorted the tape */
 	delete tape1;

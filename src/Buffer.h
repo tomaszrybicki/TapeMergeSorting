@@ -62,6 +62,7 @@ public:
 	int getRecordCount();
 
 private:
+	int listSize;
 	std::list<Record*> m_records;
 	unsigned int m_buffer_size;
 	std::list<Record*>::iterator m_iterator;

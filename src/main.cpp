@@ -17,6 +17,7 @@ using namespace std;
 
 /* TODO:
  * - Fix large files
+ * -plik testowy
  */
 
 int fileReads = 0;

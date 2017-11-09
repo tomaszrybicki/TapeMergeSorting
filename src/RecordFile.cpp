@@ -74,6 +74,7 @@ bool RecordFile::fillBuffer(Buffer* buffer, bool &wasEof) {
 	/* Create and add records until buffer is full or file has ended */
 	for(unsigned int i = 0; i < buffer->getBufferSize(); i+= 2*sizeof(double)){
 		if(file.peek() == std::ifstream::traits_type::eof()){
+			wasEof = true;
 			break;
 		}
 		/* Read 2 doubles from file */

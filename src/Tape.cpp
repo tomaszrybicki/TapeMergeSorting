@@ -34,7 +34,9 @@ Tape::Tape(std::string name, Tape* copied)
 
 
 Tape::~Tape() {
-	m_file.writeBuffer(&m_inputBuffer);
+	if(m_inputBuffer.getRecordCount()){
+		m_file.writeBuffer(&m_inputBuffer);
+	}
 }
 
 double Tape::getNextRecordValue() {
