@@ -34,6 +34,8 @@ bool RecordFile::writeBuffer(Buffer* buffer) {
 		return false;
 	}
 
+	fileWrites++;
+
 	Record* record;
 
 	/* Write each record data to file from buffer */
@@ -49,7 +51,7 @@ bool RecordFile::writeBuffer(Buffer* buffer) {
 	return true;
 }
 
-bool RecordFile::fillBuffer(Buffer* buffer) {
+bool RecordFile::fillBuffer(Buffer* buffer, bool &wasEof) {
 	double height, radius;
 	Record* newRecord;
 
@@ -60,6 +62,8 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 		std::cerr << "File cannot be opened: " << m_filename << std::endl;
 		return false;
 	}
+
+	fileReads++;
 
 	/* Set cursor in file where we last finished*/
 	file.seekg(m_cursor);
@@ -74,6 +78,7 @@ bool RecordFile::fillBuffer(Buffer* buffer) {
 
 		/* EOF */
 		}else{
+			wasEof = true;
 			break;
 		}
 	}

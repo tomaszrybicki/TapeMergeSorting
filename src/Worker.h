@@ -23,13 +23,25 @@ public:
 	/* Creates file with random records */
 	void generateRandomFile(std::string name, unsigned int recordCount);
 
+	/* Enters user interface */
+	void interface();
+
 private:
+	void interfaceGenerateFile();
+
+	void interfaceKeyboardInput();
+
+	void printMenu();
+
 	double random(double min, double max);
 
 	void distribute(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* currentOutTape,
 			Tape* otherOutTape, Record* recordToMove);
 
 	void printStatus(Tape* in1, Tape* in2, Tape* out1, Tape* out2);
+
+private:
+	bool m_printInfo;
 
 };
 

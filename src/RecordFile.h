@@ -13,6 +13,9 @@
 #include "Buffer.h"
 #include "Defines.h"
 
+extern int fileReads;
+extern int fileWrites;
+
 /*
  * This class represents a file to which records are saved.
  */
@@ -27,7 +30,7 @@ public:
 
 	/* This function writes file contents to buffer.
 	 * File still has the data */
-	bool fillBuffer(Buffer* buffer);
+	bool fillBuffer(Buffer* buffer, bool &wasEof);
 
 	/* Truncates file */
 	void clearFile();

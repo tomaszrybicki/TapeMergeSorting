@@ -72,6 +72,7 @@ private:
 	std::string m_name;
 	RecordFile m_file;
 	double m_lastPutValue;
+	bool m_isEmptyFile;
 };
 
 #endif /* TAPE_H_ */

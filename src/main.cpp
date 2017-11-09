@@ -16,17 +16,16 @@
 using namespace std;
 
 /* TODO:
- * -binary files
- * -pagefile counter
- * -generate by keyboard
- * -byte page size *
+ * - Fix large files
  */
+
+int fileReads = 0;
+int fileWrites = 0;
 
 int main() {
 
 	Worker w;
-	w.generateRandomFile("unsorted", 5);
-	w.sort2plus2("unsorted");
+	w.interface();
 
 	return 0;
 }

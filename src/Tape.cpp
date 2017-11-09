@@ -14,6 +14,7 @@ Tape::Tape(std::string name, unsigned char flags)
 	, m_name(name)
 	, m_file(m_name, flags)
 	, m_lastPutValue(-1)
+	, m_isEmptyFile(false)
 {
 }
 
@@ -24,6 +25,7 @@ Tape::Tape(std::string name, Tape* copied)
 , m_name(name)
 , m_file(m_name, NEW_TAPE)
 , m_lastPutValue(-1)
+, m_isEmptyFile(false)
 {
 	std::ifstream  source(copied->getName(), std::ios::binary);
 	std::ofstream  dest(m_name, std::ios::binary);
@@ -47,13 +49,19 @@ double Tape::getNextRecordValue() {
 
 	/* End of buffer, filling next records from file */
 	}else{
+		/* Dont access empty file */
+		if(m_isEmptyFile){
+			return END_OF_TAPE;
+		}
+
 		m_outputBuffer.clearBuffer();
-		m_file.fillBuffer(&m_outputBuffer);
+		m_file.fillBuffer(&m_outputBuffer, m_isEmptyFile);
 
 		value = m_outputBuffer.getNextRecordValue();
 
 		/* No value after filling buffer means EOF */
 		if(value == END_OF_BUFFER){
+			m_isEmptyFile = true;
 			return END_OF_TAPE;
 		}else{
 			return value;
@@ -77,14 +85,19 @@ Record* Tape::popNextRecord() {
 
 	/* Buffer is empty, filling next records from file */
 	}else{
+		if(m_isEmptyFile){
+			return 0;
+		}
+
 		m_outputBuffer.clearBuffer();
-		m_file.fillBuffer(&m_outputBuffer);
+		m_file.fillBuffer(&m_outputBuffer, m_isEmptyFile);
 
 		/* Check in buffer */
 		result = m_outputBuffer.popRecord(record);
 
 		/* No value after filling buffer means EOF */
 		if(result == false){
+			m_isEmptyFile = true;
 			return 0;
 		}else{
 			return record;
@@ -101,6 +114,7 @@ bool Tape::putRecord(Record* recordToWrite) {
 	/* Buffer is full */
 	if(result == false){
 		/* Write buffer to file */
+		m_isEmptyFile = false;
 		m_file.writeBuffer(&m_inputBuffer);
 
 		m_inputBuffer.clearBuffer();
@@ -146,6 +160,7 @@ void Tape::rewind() {
 
 void Tape::flushInputBuffer() {
 	if(m_inputBuffer.getRecordCount()){
+		m_isEmptyFile = false;
 		m_file.writeBuffer(&m_inputBuffer);
 		m_inputBuffer.clearBuffer();
 	}
