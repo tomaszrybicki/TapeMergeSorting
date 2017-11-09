@@ -32,8 +32,6 @@ void Worker::sort2plus2(string tapeName) {
 	Tape* tape3 = new Tape("File3.bin", NEW_TAPE);
 	Tape* tape4 = new Tape("File4.bin", NEW_TAPE);
 
-	tape1->print();
-
 	/* Original was copied to tape1 and can be released */
 	delete original;
 
