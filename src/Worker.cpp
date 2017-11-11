@@ -30,7 +30,6 @@ void Worker::sort2plus2(string tapeName) {
 	Tape* tape1 = new Tape("File1.bin", original);
 	Tape* tape2 = new Tape("File2.bin", NEW_TAPE);
 	Tape* tape3 = new Tape("File3.bin", NEW_TAPE);
-	Tape* tape4 = new Tape("File4.bin", NEW_TAPE);
 
 	/* Original was copied to tape1 and can be released */
 	delete original;
@@ -39,55 +38,57 @@ void Worker::sort2plus2(string tapeName) {
 	 *  as tapes which are read */
 
 	Record* recordToMove = NULL;
-	Tape* inTape1 = tape1;
-	Tape* inTape2 = tape2;
-	Tape* currentOutTape = tape3;
-	Tape* otherOutTape = tape4;
+	Tape* inTape = tape1;
+	Tape* outTape1 = tape2;
+	Tape* outTape2 = tape3;
 	Tape* tapeToRead = NULL;
 
+	bool isSorted=true;
 
-	/* While we have two non-empty input tapes that need merging == unsorted */
+
+	/* While during merge we had more than one series */
 	int phase = 0;
 	do{
 		phase++;
+		isSorted = true;
 
-		/* While there is at least one record in any of input tapes */
-		while(inTape1->getNextRecordValue() != END_OF_TAPE
-				|| inTape2->getNextRecordValue() != END_OF_TAPE){
+		/* While there is at least one record in the input tape */
+		while(inTape->getNextRecordValue() != END_OF_TAPE){
+			distribute(inTape, outTape2, outTape1, recordToMove);
+		}
 
-			distribute(inTape1, inTape2, tapeToRead, currentOutTape, otherOutTape, recordToMove);
+		inTape->rewind();
 
+		/* While there is at least one record to merge */
+		while(outTape1->getNextRecordValue() != END_OF_TAPE
+				|| outTape2->getNextRecordValue() != END_OF_TAPE){
+
+			/* If there was more than one series, tape is not sorted */
+			if(!merge(outTape1, outTape2, tapeToRead, inTape, recordToMove)){
+				isSorted = false;
+			}
 		}
 
 		if(m_printInfo){
-			cout << endl << "After phase: " << phase << endl;
-			printStatus(inTape1, inTape2, currentOutTape, otherOutTape);
+				cout << endl << "After phase: " << phase << endl;
+				printStatus(inTape, outTape1, outTape2);
 		}
 
-		/* Swap outTapes with inTapes for another phase*/
-		inTape1->rewind();
-		inTape2->rewind();
-		swap(inTape1, currentOutTape);
-		swap(inTape2, otherOutTape);
+		outTape1->rewind();
+		outTape2->rewind();
 
-	}while(inTape1->getNextRecordValue() != END_OF_TAPE
-			&& inTape2->getNextRecordValue() != END_OF_TAPE);
+	}while(!isSorted);
 
 	cout << "After sorting: " << endl;
-	if(inTape1->getNextRecordValue() != END_OF_TAPE){
-		inTape1->print();
-	}else{
-		inTape2->print();
-	}
-	cout << "File reads: " << fileReads << " file writes: " << fileWrites << " phases: " << phase << endl;
+	inTape->print();
 
+	cout << "File reads: " << fileReads << " file writes: " << fileWrites << " phases: " << phase << endl;
 
 
 	/* We have sorted the tape */
 	delete tape1;
 	delete tape2;
 	delete tape3;
-	delete tape4;
 }
 
 void Worker::generateRandomFile(string name, unsigned int recordCount) {
@@ -109,24 +110,72 @@ void Worker::generateRandomFile(string name, unsigned int recordCount) {
 	delete tape;
 }
 
-void Worker::distribute(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* currentOutTape,
-		Tape* otherOutTape, Record* recordToMove) {
+bool Worker::merge(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* &currentOutTape, Record* recordToMove) {
 
 	/* Choose a tape to read which has smallest value */
 	double value1 = inTape1->getNextRecordValue();
 	double value2 = inTape2->getNextRecordValue();
+	double lastValue = currentOutTape->getLastPutValue();
+	bool isSeriesKept = true;
 
-	if ((value1 <= value2 && value1 != END_OF_TAPE) || value2 == END_OF_TAPE){
-		tapeToRead = inTape1;
-	}else{
+	/* Don't use empty tape */
+	if(value1 == END_OF_TAPE){
 		tapeToRead = inTape2;
+	}else if (value2 == END_OF_TAPE){
+		tapeToRead = inTape1;
+
+	/* Both values from input tapes are continuing series */
+	}else if(value1 >= lastValue && value2 >= lastValue){
+
+		/* Choose tape with smaller value */
+		if(value1 < value2){
+			tapeToRead = inTape1;
+		}else{
+			tapeToRead = inTape2;
+		}
+
+	/* None of the input values continues series */
+	}else if(value1 < lastValue && value2 < lastValue){
+
+		/* Choose tape with smaller value */
+		if(value1 < value2){
+			tapeToRead = inTape1;
+		}else{
+			tapeToRead = inTape2;
+		}
+
+	/* Only one input value continues series */
+	}else{
+		if(value1 >= lastValue){
+			tapeToRead = inTape1;
+		}else{
+			tapeToRead = inTape2;
+		}
 	}
 
 	/* Get the record */
 	recordToMove = tapeToRead->popNextRecord();
 
+	if(recordToMove->getVolume() < currentOutTape->getLastPutValue()){
+		isSeriesKept = false;
+	}
+
+	currentOutTape->putRecord(recordToMove);
+
+	return isSeriesKept;
+}
+
+void Worker::distribute(Tape* inTape1, Tape* &otherOutTape, Tape* &currentOutTape,
+		 Record* recordToMove) {
+
+
+	/* Choose a tape to read which has smallest value */
+	double value1 = inTape1->getNextRecordValue();
+
+	/* Get the record */
+	recordToMove = inTape1->popNextRecord();
+
 	value1 = currentOutTape->getLastPutValue();
-	value2 = otherOutTape->getLastPutValue();
 
 	/* Write the record to current outTape if it continues series */
 	if (recordToMove->getVolume() >= value1){
@@ -263,11 +312,10 @@ void Worker::interfaceTextFile() {
 	cout << "Loaded test file: " << input << endl << endl;
 }
 
-void Worker::printStatus(Tape* in1, Tape* in2, Tape* out1, Tape* out2) {
+
+void Worker::printStatus(Tape* in1, Tape* out1, Tape* out2) {
 	cout << "Input Tape 1:\t";
 	in1->print();
-	cout << "Input Tape 2:\t";
-	in2->print();
 	cout << "Output Tape 1:\t";
 	out1->print();
 	cout << "Output Tape 2:\t";

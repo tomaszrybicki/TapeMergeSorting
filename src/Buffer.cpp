@@ -20,7 +20,7 @@ Buffer::~Buffer() {
 
 bool Buffer::popRecord(Record* &recordToGet) {
 	/* Iterated entire list - return false */
-	if(m_iterator == m_records.end() || m_records.size() == 0){
+	if(m_iterator == m_records.end() || m_records.size() == 0 || *m_iterator == 0){
 		recordToGet = 0;
 		return false;
 	}

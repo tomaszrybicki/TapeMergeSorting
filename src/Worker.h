@@ -37,10 +37,12 @@ private:
 
 	double random(double min, double max);
 
-	void distribute(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* currentOutTape,
-			Tape* otherOutTape, Record* recordToMove);
+	bool merge(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* &currentOutTape,
+			 Record* recordToMove);
+	void distribute(Tape* inTape1, Tape* &otherOutTape, Tape* &currentOutTape,
+			 Record* recordToMove);
 
-	void printStatus(Tape* in1, Tape* in2, Tape* out1, Tape* out2);
+	void printStatus(Tape* in1, Tape* out1, Tape* out2);
 
 private:
 	bool m_printInfo;

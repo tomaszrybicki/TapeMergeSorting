@@ -6,6 +6,7 @@
  */
 
 #include "Record.h"
+#include <iostream>
 
 Record::Record(double h, double r)
 	: m_height(h)
