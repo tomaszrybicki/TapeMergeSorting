@@ -130,8 +130,6 @@ void RecordFile::print(double* previousValue) {
 		return;
 	}
 
-
-
 	while(true){
 
 		if(file.peek() == std::ifstream::traits_type::eof()){

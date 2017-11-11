@@ -3,7 +3,7 @@
 // Author      : Tomasz Rybicki
 // Version     : 1.0
 // Description : Entry point of the application. The application
-// 				 demonstrates 2+2 natural merge sorting of tapes
+// 				 demonstrates 2+1 natural merge sorting of tapes
 //============================================================================
 
 #include <iostream>
@@ -19,7 +19,6 @@ int fileReads = 0;
 int fileWrites = 0;
 
 int main() {
-
 	Worker w;
 	w.interface();
 

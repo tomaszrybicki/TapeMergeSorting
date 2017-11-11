@@ -34,9 +34,6 @@ void Worker::sort2plus2(string tapeName) {
 	/* Original was copied to tape1 and can be released */
 	delete original;
 
-	/* We start off using tape1(original) and tape2 (empty)
-	 *  as tapes which are read */
-
 	Record* recordToMove = NULL;
 	Tape* inTape = tape1;
 	Tape* outTape1 = tape2;
@@ -54,7 +51,7 @@ void Worker::sort2plus2(string tapeName) {
 
 		/* While there is at least one record in the input tape */
 		while(inTape->getNextRecordValue() != END_OF_TAPE){
-			distribute(inTape, outTape2, outTape1, recordToMove);
+			distribute(inTape, outTape1, outTape2, recordToMove);
 		}
 
 		inTape->rewind();
@@ -67,6 +64,7 @@ void Worker::sort2plus2(string tapeName) {
 			if(!merge(outTape1, outTape2, tapeToRead, inTape, recordToMove)){
 				isSorted = false;
 			}
+
 		}
 
 		if(m_printInfo){
@@ -78,14 +76,12 @@ void Worker::sort2plus2(string tapeName) {
 		outTape2->rewind();
 
 	}while(!isSorted);
+	/* We have sorted the tape */
 
 	cout << "After sorting: " << endl;
 	inTape->print();
-
 	cout << "File reads: " << fileReads << " file writes: " << fileWrites << " phases: " << phase << endl;
 
-
-	/* We have sorted the tape */
 	delete tape1;
 	delete tape2;
 	delete tape3;
@@ -165,20 +161,18 @@ bool Worker::merge(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* &curren
 	return isSeriesKept;
 }
 
-void Worker::distribute(Tape* inTape1, Tape* &otherOutTape, Tape* &currentOutTape,
+void Worker::distribute(Tape* inTape, Tape* &otherOutTape, Tape* &currentOutTape,
 		 Record* recordToMove) {
 
-
-	/* Choose a tape to read which has smallest value */
-	double value1 = inTape1->getNextRecordValue();
+	double value;
 
 	/* Get the record */
-	recordToMove = inTape1->popNextRecord();
+	recordToMove = inTape->popNextRecord();
 
-	value1 = currentOutTape->getLastPutValue();
+	value = currentOutTape->getLastPutValue();
 
 	/* Write the record to current outTape if it continues series */
-	if (recordToMove->getVolume() >= value1){
+	if (recordToMove->getVolume() >= value){
 		currentOutTape->putRecord(recordToMove);
 	}else{
 		swap(currentOutTape, otherOutTape);
@@ -294,7 +288,6 @@ void Worker::interfaceKeyboardInput() {
 
 	newTape->print();
 	delete newTape;
-
 }
 
 void Worker::interfaceTextFile() {
@@ -305,7 +298,6 @@ void Worker::interfaceTextFile() {
 	cout << "Enter the name of the test file" << endl;
 	cout << "> ";
 	cin >> input;
-
 
 	Tape::textToBinary(input);
 
@@ -321,7 +313,6 @@ void Worker::printStatus(Tape* in1, Tape* out1, Tape* out2) {
 	cout << "Output Tape 2:\t";
 	out2->print();
 	cout << "File reads: " << fileReads << " file writes: " << fileWrites << endl;
-
 }
 
 double Worker::random(double min, double max){

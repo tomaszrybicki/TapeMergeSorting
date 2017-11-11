@@ -39,7 +39,7 @@ private:
 
 	bool merge(Tape* inTape1, Tape* inTape2, Tape* tapeToRead, Tape* &currentOutTape,
 			 Record* recordToMove);
-	void distribute(Tape* inTape1, Tape* &otherOutTape, Tape* &currentOutTape,
+	void distribute(Tape* inTape, Tape* &otherOutTape, Tape* &currentOutTape,
 			 Record* recordToMove);
 
 	void printStatus(Tape* in1, Tape* out1, Tape* out2);
